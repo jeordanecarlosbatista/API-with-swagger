@@ -1,0 +1,162 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  # API Books
+    # GET
+    /books/title:
+      # binds a127 app logic to a route
+      x-swagger-router-controller: books.controller
+      get:
+        description: Browse books by title
+        # used as the method name of the controller
+        operationId: getByTitle
+        parameters:
+          - name: name
+            in: query
+            description: Book's title
+            required: true
+            type: string
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/SuccessResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+    /books/keyword: 
+      # binds a127 app logic to a route
+      x-swagger-router-controller: books.controller
+      get:
+        description: Browse books by keyword
+        # used as the method name of the controller
+        operationId: getByKeyword
+        parameters:
+          - name: name
+            in: query
+            description: Book's keyword
+            required: true
+            type: string
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/SuccessResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+    /books/{isbn}/data:
+      # binds a127 app logic to a route
+      x-swagger-router-controller: books.controller
+      get:
+        description: Browse data books by isbn
+        # used as the method name of the controller
+        operationId: getDataByISBN
+        parameters:
+          - name: isbn
+            in: path
+            description: Book's isbn
+            required: true
+            type: number
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/SuccessResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse" 
+    /books/{isbn}/reviews:
+      # binds a127 app logic to a route
+      x-swagger-router-controller: books.controller
+      get:
+        description: Browse reviews books by isbn
+        # used as the method name of the controller
+        operationId: getReviewsByISBN
+        parameters:
+          - name: isbn
+            in: path
+            description: Book's isbn
+            required: true
+            type: number
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/SuccessResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"  
+  
+
+  # API Authors
+    # GET
+    /authors/{id}/books:
+      # binds a127 app logic to a route
+      x-swagger-router-controller: author.controller
+      get:
+        description: Browse books by author
+        # used as the method name of the controller
+        operationId: getBooks
+        parameters:
+          - name: id
+            in: path
+            description: Id by Author
+            required: true
+            type: number
+        responses:
+          "200":
+            description: Success
+            schema:
+              # a pointer to a definition
+              $ref: "#/definitions/SuccessResponse"
+          # responses may fall through to errors
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  
+ 
+# complex objects have schema definitions
+definitions:
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
